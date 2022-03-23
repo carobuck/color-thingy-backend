@@ -8,13 +8,16 @@ import pandas as pd
 from datetime import date
 import json
 
+import config
+
 app = Flask(__name__)
 CORS(app)
 
 # Initialize creds for reading data from firestore
-#cred = credentials.Certificate('firebase_secret.json')
-#firebase_admin.initialize_app(cred)
-#db = firestore.client()
+#cred = credentials.Certificate('color-thingy-firebase.json')
+cred = credentials.Certificate(config.firestore_secret)
+firebase_admin.initialize_app(cred)
+db = firestore.client()
 
 ## FUNCTIONS
 ## APP ROUTES
@@ -27,32 +30,32 @@ def about():
     return 'About Page Route V1'
 
 
-## ALT IF WE SAVE LONGER-DOC/COLLECTION CHAIN IN FIRESTORE ##
-@app.route("/getData", methods=["POST"])
-def getData():
+## Save color + color name + color description for particular user.
+@app.route("/saveColor", methods=["POST"])
+def saveColor():
     if request.method == "POST":
         data = request.get_json()
 
+        # TODO: if collection exist, but no document, assume it's first entry (thus "self" input for document). else assume "other" person reporting for user
+        # ALT: enter in name of who thought you were a particular color (for yourself, it'd be you)...
+        # OOOOH : actually: collection = user name/id; document = whoever is giving color description (could be you or someone else)
+
         # Get all user input from front end
-        #country = data['country']
-        #starting_event = data['startingEvent']
-        #vax,sd,quar = data['interventions'] # interventions passed as list of #: [vax,socialDist,quar]
-        #interventions = 'vax' + str(vax) + '_sd' + str(sd) + '_quar' + str(quar) # put in format to match in firestore
+        username = data['user'] # who is color describing? # TODO: this might turn into unique userid??
+        reporter = data['reporter'] # who is giving color description? (could be self or other person)
+        color = data['color']
+        color_name = data['color_name']
+        color_reason = data['color_reason']
 
-        #data_req = data['request'] # what piece of info is frontend asking for? (e.g. map, line chart data, etc.)
+        # Push data to proper Firestore collection/document
+        fs_data = {'color':color,'color_name':color_name,'color_reason':color_reason}
+        db.collection(username).document(reporter).set(fs_data, merge=True)
 
-        # Pull collection/document for specified parameters:
         #doc_ref = db.collection(country).document(interventions).collection(starting_event).document(data_req)
         #doc = doc_ref.get()
         #data = doc.to_dict()
 
-        #if data_req == 'viz_cal': # Need to add dynamic dates to daily infection values
-    #        data['data'] = wrangle_cal(data['data'])
-#
-#        if data_req == 'viz_map': # Need to convert 'load' data to convert to json (from string format firestore needs to save)
-#            data['data'] = json.loads(data['data'])
-
-        return jsonify(data)
+        return jsonify('hello') # TODO: can't have empty return stmt for Flask??
 
 
 
