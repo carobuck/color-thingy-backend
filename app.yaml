@@ -1,6 +1,6 @@
 runtime: python38
 # For first deployment to a new project, need to leave service blank, then can deploy with desired service name
-# service: color-thingy
+service: color-thingy
 # TBD need to fill out!
 
 
