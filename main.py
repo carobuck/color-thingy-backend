@@ -57,6 +57,20 @@ def saveColor():
 
         return jsonify('hello') # TODO: can't have empty return stmt for Flask??
 
+## Get all colors/entries for a user
+@app.route("/getColors", methods=["POST"])
+def getColors():
+    if request.method == "POST":
+        data = request.get_json()
+        username = data['user']
+
+        docs = db.collection(username).stream()
+        results = {}
+        for doc in docs:
+            temp = {doc.id:doc.to_dict()}
+            results.update(temp)
+        
+        return jsonify(results)
 
 
 if __name__ == "__main__":

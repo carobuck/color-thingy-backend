@@ -1,0 +1,8 @@
+## test calls for backend
+
+# Local
+curl -H 'Content-Type: application/json' -X POST -d '{"user":"caro","reporter":"caro_self","color":"#some hex","color_name":"deep sea green","color_reason":"soothing color"}' http://127.0.0.1:5000/saveColor
+curl -H 'Content-Type: application/json' -X POST -d '{"user":"caro"}' http://127.0.0.1:5000/getColors
+
+# Live GCP
+curl -H 'Content-Type: application/json' -X POST -d '{"user":"caro","reporter":"mick","color":"#some hex","color_name":"deep sea green","color_reason":"soothing color"}' https://color-thingy-dot-color-thingy.uc.r.appspot.com/saveColor
