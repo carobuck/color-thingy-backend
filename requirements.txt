@@ -2,3 +2,5 @@ flask==2.0.1
 flask_cors
 firebase_admin
 pandas
+flask-sqlalchemy
+flask-login
