@@ -129,3 +129,5 @@ dmypy.json
 .pyre/
 
 config.py
+color-thingy-firebase.json
+db.sqlite
